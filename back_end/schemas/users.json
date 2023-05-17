@@ -1,0 +1,160 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "user": {
+            "$id": "#users",
+            "title": "User",
+            "description": "A user on the site",
+            "type": "object",
+            "properties": {
+                "role": {
+                    "description": "Role of the user. Default user",
+                    "type": "string"
+                },
+                "firstName": {
+                    "description": "First name of the user",
+                    "type": "string"
+                },
+                "lastName": {
+                    "description": "Last name of the user",
+                    "type": "string"
+                },
+                "userame": {
+                    "description": "Users's username",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "A users password",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "User's email",
+                    "type": "string"
+                },
+                "avatarURL": {
+                    "description": "URL for image of user's account",
+                    "type": "string",
+                    "format": "uri"
+                }
+            },
+            "required": ["username", "email", "password"],
+            "additionalProperties": true
+        },
+        
+        "userView": {
+            "$id": "#userView",
+            "title": "User View",
+            "description": "Data visible to users and admins (excludes password).",
+            "type": "object",
+            "properties": {
+                "role": {
+                    "description": "Permissions Role",
+                    "type": "string"
+                },
+                "firstName": {
+                    "description": "First name",
+                    "type": "string"
+                },
+                "lastName": {
+                    "description": "Last name",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "Unique username",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Unique email address",
+                    "type": "string"
+                },
+                "avatarURL": {
+                    "description": "URL of avatar image",
+                    "type": "string",
+                    "format": "uri"
+                }
+            }
+        },
+
+        "userUpdate": {
+            "$id": "#userUpdate",
+            "title": "User Update",
+            "description": "Data a user can update (excludes username).",
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "description": "First name",
+                    "type": "string"
+                },
+                "lastName": {
+                    "description": "Last name",
+                    "type": "string"
+                },
+                "email": {
+                   "description": "Unique email address",
+                    "type": "string",
+                    "format": "email"
+                },
+                "avatarURL": {
+                    "description": "URL of avatar image",
+                    "type": "string",
+                    "format": "uri"
+                },
+                "password": {
+                    "description": "Password for registration",
+                    "type": "string",
+                    "minLength": 6
+                }
+            },
+            "additionalProperties": false
+        },
+              
+        "userList": {
+            "$id": "#userList",
+            "title": "User List",
+            "description": "List of all users visible to admin only.",
+            "type": "array",
+            "items": {"$ref": "#/definitions/userView"}
+        },
+              
+              
+        "userUpdated": {
+            "$id": "#userUpdated",
+            "title": "User Updated",
+            "description": "Confirmation of a successful user update/creation",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the updated user record",
+                    "type": "integer"
+                },
+                "updated": {
+                    "description": "Boolean indicator of success",
+                    "type": "boolean"
+                },
+                "link": {
+                    "description": "Path to retrieve user record",
+                    "type": "string",
+                    "format": "uri"
+                }
+            }
+        },
+              
+              
+        "userDeleted": {
+            "$id": "#userDeleted",
+            "title": "User Deleted",
+            "description": "Confirmation of a successful deletion",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the updated user record",
+                    "type": "integer"
+                },
+                "deleted": {
+                    "description": "Boolean indicator of success",
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

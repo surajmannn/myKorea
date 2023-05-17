@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "order": {
+            "$id": "#orders",
+            "title": "Order",
+            "description": "An order from a user",
+            "type": "object",
+            "properties": {
+                "productID": {
+                    "description": "ID of the product",
+                    "type": "integer"
+                },
+                "userID": {
+                    "description": "userID of the user who made the order",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "username of the user who made the order",
+                    "type": "string"
+                },
+                "quantity": {
+                    "description": "quantity ordered",
+                    "type": "integer",
+                    "minimum" : 1
+                },
+                "productPrice": {
+                    "description": "price of the product to 2 d.p",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "totalPrice": {
+                    "description": "total price of the order to 2 d.p",
+                    "type": "number",
+                    "minimum": 0
+                }
+            },
+            "required": ["productID", "userID", "username", "productPrice", "totalPrice"],
+            "additionalProperties": true
+        },
+        
+        "orderUpdated": {
+            "$id": "#orderUpdated",
+            "title": "Update Order",
+            "description": "Confirmation of a successful order update",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the updated order record",
+                    "type": "integer"
+                },
+                "updated": {
+                    "description": "Boolean indicator of success",
+                    "type": "boolean"
+                },
+                "link": {
+                    "description": "Path to retrieve product record",
+                    "type": "string",
+                    "format": "uri"
+                }
+            }    
+        },
+
+        "orderDeleted": {
+            "$id": "#orderDeleted",
+            "title": "Order Delete",
+            "description": "Delete order on the site",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the deleted product",
+                    "type": "integer"
+                },
+                "deleted": {
+                    "description": "Boolean indicator of success",
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

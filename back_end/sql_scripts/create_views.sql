@@ -1,0 +1,5 @@
+CREATE TABLE views (
+      productID INT,  
+      dateViewed DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (productID) REFERENCES products (ID) ON DELETE CASCADE
+);

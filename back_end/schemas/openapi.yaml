@@ -1,0 +1,597 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: MyKorea Back End
+  description: E-Commerce API for Korean Ramen Products.
+  contact:
+    name: Suraj Mann
+    email: manns18@coventry.ac.uk
+  license:
+    name: Apache 2.0
+url: 'https://www.apache.org/licenses/LICENSE-2.0.html' 
+servers:
+  - url: 'https://veronaparking-westernorinoco-3000.codio-box.uk/myKorea'
+    description: Development server
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+  - Role-acl: []
+tags:
+  - name: Users
+    description: API endpoints for user management. 
+  - name: Products
+    description: Access and perform CRUD operations on products
+  - name: Orders
+    description: Access and perform CRUD operations on product orders
+  - name: Reviews
+    description: Access and perform CRUD operations on Product Reviews
+paths:
+  /users:
+    summary: Represents an individual user
+    description: >
+      This resource represents an individual user in the system.
+      Each user is identified by a numeric `id`.
+    get:
+      tags:
+        - Users
+      description:
+        Get a list of all users.
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/user
+        '403':
+          description: Only admin users can view all accounts list
+    post:
+      tags:
+        - Users
+      description:
+        Create a new user account.
+      requestBody:
+        description: All new user data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./users.json#/definitions/user
+      security: []
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/userUpdated
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the user
+    get:
+      tags:
+        - Users
+      description:
+        Get user by id.
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: View of user record
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/userView
+        '403':
+          description: Non-admin users can only view their own record
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Users
+      description:
+        Update user by id.
+      requestBody:
+        description: Update a visible property or the password.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./users.json#/definitions/user
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: Confirmation and link to record.
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/userUpdated
+        '403':
+          description: Non-admin users can only update their own record
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Users
+      description:
+        Delete user by id.
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: Confirmation of deletion.
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/userDeleted
+        '401':
+          description: Only admin or owner can delete the record
+        '404':
+          description: Not found
+  /users/{username}:
+    parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+        description: unique username of the user
+    get:
+      tags:
+        - Users
+      description:
+        Get user by their username.
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: View of user record
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/userView
+        '403':
+          description: Non-admin users can only view their own record
+        '404':
+          description: Not found
+  /users/{id}/orders:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: gets all orders of specific user by their ID
+    get:
+      tags:
+        - Orders
+      description:
+        Get a user's list of orders via their user ID
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: view all orders of users
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/order
+        '403':
+          description: Non-admin users can only view their own orders
+        '404':
+          description: Not found
+  /users/{username}/orders:
+    parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+        description: gets all orders of specific user by their username
+    get:
+      tags:
+        - Orders
+      description:
+        Get a user's list of orders via their Username
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: view all orders of users
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/order
+        '403':
+          description: Non-admin users can only view their own orders
+        '404':
+          description: Not found
+  /products:
+    summary: Represents products
+    description: >
+      This resource represents the products on sale on the e-commerce site.
+    get:
+      tags:
+        - Products
+      description:
+        Get a list of all products. Anyone can view.
+      security: []
+      responses:
+        '200':
+          description: List of all products
+          content:
+            application/json:
+              schema:
+                $ref: ./products.json#/definitions/product
+    post:
+      tags:
+        - Products
+      description:
+        Create new product for the site.
+      requestBody:
+        description: All new product data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./products.json#/definitions/product
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: ./products.json#/definitions/product
+        '403': 
+          description: Only admins can create new products
+  /products/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of a product
+    get:
+      tags:
+        - Products
+      description:
+        Get product by its id.
+      security: []
+      responses:
+        '200':
+          description: View the product. Anyone can view.
+          content:
+            application/json:
+              schema:
+                $ref: ./products.json#/definitions/product
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Products
+      description:
+        Update product by it's id.
+      requestBody:
+        description: Update a visible property.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./products.json#/definitions/product
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '201':
+          description: Confirmation of update and link.
+          content:
+            application/json:
+              schema:
+                $ref: ./products.json#/definitions/productUpdated
+        '403':
+          description: Only admins can update products
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Products
+      description:
+        Delete product by it's id.
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '200':
+          description: Confirmation of deletion.
+          content:
+            application/json:
+              schema:
+                $ref: ./products.json#/definitions/productDeleted
+        '401':
+          description: Only admin can delete product
+        '404':
+          description: Not found
+  /products/views/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of a product
+    get:
+      tags:
+        - Products
+      description:
+        See traffic views of a product by its ID.
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '200':
+          description: Views of product shown.
+        '403':
+          description: Only admin can view.
+        '404':
+          description: Not found
+  /products/{id}/reviews:
+    parameters: 
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: numeric id of a product
+    get:
+      tags:
+        - Products
+      description: 
+        See all reviews of a specific products.
+      security: []
+      reponses:
+        '200': 
+          description: reviews of product shown.
+          content:
+            application/json:
+              schema:
+                $ref: ./reviews.json#/definitions/reviews
+        '404':
+          description: Not found
+  /orders:
+    summary: Represents orders of products.
+    description: >
+      This resource represents product orders from the e-commerce site.
+    get:
+      tags:
+        - Orders
+      description:
+        Get a list of all orders.
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '200':
+          description: List of all orders
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/order
+        '403':
+          description: Only admin can view all orders.
+    post:
+      tags:
+        - Orders
+      description:
+        Create new order for the site.
+      requestBody:
+        description: All new product data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./orders.json#/definitions/order
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/order
+        '401':
+          description: Not authorised
+  /orders/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of an order
+    get:
+      tags:
+        - Orders
+      description:
+        Get order by its id.
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: View order record.
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/order
+        '403':
+          description: Only admin can view by it's id. User can view their order via users route.
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Orders
+      description:
+        Update order by it's id.
+      requestBody:
+        description: Update a visible property.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./orders.json#/definitions/order
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '201':
+          description: Confirmation of update and link.
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/orderUpdated
+        '403':
+          description: Only admins can update orders
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Orders
+      description:
+        Delete order by it's id.
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '202':
+          description: Confirmation of deletion.
+          content:
+            application/json:
+              schema:
+                $ref: ./orders.json#/definitions/orderDeleted
+        '403':
+          description: Only admin can delete order
+        '404':
+          description: Not found
+  /reviews:
+    summary: Represents a review
+    description: >
+      This resource represents an individual reviews in the system.
+      Each review is identified by a unique `id`.
+    get:
+      tags:
+        - Reviews
+      description:
+        Get a list of all reviews.
+      security: []
+      responses:
+        '200':
+          description: List of all reviews
+          content:
+            application/json:
+              schema:
+                $ref: ./reviews.json#/definitions/review
+        '403':
+          description: Only admin users can view all reviews list
+    post:
+      tags:
+        - Reviews
+      description:
+        Create a new review.
+      requestBody:
+        description: All new review data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./reviews.json#/definitions/review
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '201':
+          description: review created
+          content:
+            application/json:
+              schema:
+                $ref: ./users.json#/definitions/user
+        '401':
+          descrption: >
+            only authorised user who has placed an order
+            for the specific product can create a review
+  /reviews/{id}:
+    parameters:
+    - in: path
+      name: id
+      schema:
+        type: integer
+      required: true
+      description: Numeric id of a review
+    get:
+      tags:
+        - Reviews
+      description:
+        Get review by its id.
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '200':
+          description: View review record.
+          content:
+            application/json:
+              schema:
+                $ref: ./reviews.json#/definitions/review
+        '403':
+          description: Only admin or owner can view by it's id.
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Reviews
+      description:
+        Update review by it's id.
+      requestBody:
+        description: Update a visible property.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./reviews.json#/definitions/review
+      security:
+        - BasicAuth: [admin, user]
+      responses:
+        '201':
+          description: Confirmation of update and link.
+          content:
+            application/json:
+              schema:
+                $ref: ./reviews.json#/definitions/reviewUpdated
+        '403':
+          description: Only admins or owner can update
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Reviews
+      description:
+        Delete review by it's id.
+      security:
+        - BasicAuth: [admin]
+      responses:
+        '202':
+          description: Confirmation of deletion.
+          content:
+            application/json:
+              schema:
+                $ref: ./reviews.json#/definitions/reviewDeleted
+        '403':
+          description: Only admin can delete reviews
+        '404':
+          description: Not found

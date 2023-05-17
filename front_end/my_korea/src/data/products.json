@@ -1,0 +1,33 @@
+[
+    {
+        "id": 1,
+        "title": "Samyang Spicy Ramen",
+        "summary": "Super Spicy Black Chicken Ramen",
+        "imgURL": "https://groceries.morrisons.com/productImages/380/380085011_0_640x640.jpg?identifier=a303649ce5bcb481fdb6f2b740167715",
+        "productPrice": 2.5,
+        "review": 10,
+        "rating": 5,
+        "cart": false
+    },
+
+    {
+        "id": 2,
+        "title": "Samyang 2X Spicy Ramen",
+        "summary": "2X Super Spicy Red Chicken Ramen",
+        "imgURL": "https://groceries.morrisons.com/productImages/380/380085011_0_640x640.jpg?identifier=a303649ce5bcb481fdb6f2b740167715",
+        "productPrice": 2.5,
+        "review": 15,
+        "rating": 4,
+        "cart": false
+    },
+    {
+        "id": 3,
+        "title": "Samyang Pink Ramen modified",
+        "summary": "Carbonara Hot Chicken Flavour Ramen",
+        "imgURL": "https://groceries.morrisons.com/productImages/380/380085011_0_640x640.jpg?identifier=a303649ce5bcb481fdb6f2b740167715",
+        "productPrice": 2.5,
+        "review": 10,
+        "rating": 5,
+        "cart": false
+    }
+]

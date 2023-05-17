@@ -1,0 +1,76 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "review": {
+            "$id": "#reviews",
+            "title": "Review",
+            "description": "A product review",
+            "type": "object",
+            "properties": {
+                "productID": {
+                    "description": "ID for the product being reviewed",
+                    "type": "integer"
+                },
+                "review": {
+                    "description": "Review body",
+                    "type": "string"
+                },
+                "rating": {
+                    "description": "rating out of 5 for the product",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                },
+                "userID": {
+                    "description": "User's ID",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "User's username",
+                    "type": "string"
+                }
+            },
+            "required": ["productID", "rating", "userID", "username"],
+            "additionalProperties": true
+        },
+        
+        "reviewUpdated": {
+            "$id": "#reviewUpdated",
+            "title": "Review Order",
+            "description": "Confirmation of a successful review update",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the updated review record",
+                    "type": "integer"
+                },
+                "updated": {
+                    "description": "Boolean indicator of success",
+                    "type": "boolean"
+                },
+                "link": {
+                    "description": "Path to retrieve product record",
+                    "type": "string",
+                    "format": "uri"
+                }
+            }    
+        },
+
+        "reviewDeleted": {
+            "$id": "#reviewDeleted",
+            "title": "Review Delete",
+            "description": "Delete review on the site",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the deleted review",
+                    "type": "integer"
+                },
+                "deleted": {
+                    "description": "Boolean indicator of success",
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
